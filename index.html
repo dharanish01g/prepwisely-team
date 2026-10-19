@@ -4,13 +4,456 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>PrepWisely Team</title>
-  <meta http-equiv="refresh" content="0; url=privacy.html">
-  <link rel="stylesheet" href="style.css">
+  <meta name="description" content="PrepWisely Team is a simple task app for small teams: personal to-dos and shared tasks in one place, with a separate workspace for every team you're in.">
+  <meta property="og:title" content="PrepWisely Team">
+  <meta property="og:description" content="Plan, assign and track work together. Personal to-dos and shared team tasks, one workspace per team.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --canvas: #f5f6fa;
+      --surface: #ffffff;
+      --surface-muted: #eef0f5;
+      --border: #e6e8ef;
+      --text: #14151a;
+      --text-2: #5d6170;
+      --muted: #9a9ead;
+      --brand: #5b4bf5;
+      --brand-soft: #eeebff;
+      --grad: linear-gradient(135deg, #6d5dfc, #8e54e9);
+      --success: #12b76a;
+      --success-soft: #e5f7ee;
+      --warning: #f08c00;
+      --warning-soft: #fef3e2;
+      --info: #2e90fa;
+      --info-soft: #e6f1fe;
+      --danger: #f04438;
+      --shadow: 0 12px 30px rgba(20, 21, 26, 0.07);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --canvas: #0e0f13;
+        --surface: #17181d;
+        --surface-muted: #21232a;
+        --border: #2a2c35;
+        --text: #f3f4f7;
+        --text-2: #a5a9b8;
+        --muted: #6b6f7e;
+        --brand: #8b7dff;
+        --brand-soft: #262046;
+        --grad: linear-gradient(135deg, #5b4bf5, #7b3fd9);
+        --success: #32d583;
+        --success-soft: #10291e;
+        --warning: #fdb022;
+        --warning-soft: #2e2210;
+        --info: #53b1fd;
+        --info-soft: #102538;
+        --danger: #f97066;
+        --shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+      }
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--canvas);
+      color: var(--text);
+      font: 16px/1.6 "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--brand); }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+    @media (max-width: 600px) { .wrap { padding: 0 16px; } }
+
+    /* Hero */
+    .hero {
+      background: var(--grad);
+      color: #fff;
+      border-radius: 0 0 40px 40px;
+      overflow: hidden;
+    }
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 0;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; letter-spacing: -0.3px; color: #fff; text-decoration: none; }
+    .logo-mark {
+      width: 36px; height: 36px; border-radius: 11px;
+      background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3);
+      display: grid; place-items: center;
+    }
+    nav .links { display: flex; gap: 22px; }
+    nav .links a { color: rgba(255,255,255,0.85); text-decoration: none; font-weight: 600; font-size: 15px; }
+    nav .links a:hover { color: #fff; }
+    @media (max-width: 600px) { nav .links { display: none; } }
+
+    .hero-grid {
+      display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: center;
+      padding: 48px 0 0;
+    }
+    @media (max-width: 860px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 40px; padding-top: 24px; text-align: center; }
+    }
+    .eyebrow {
+      display: inline-block; padding: 6px 12px; border-radius: 999px;
+      background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.25);
+      font-size: 13px; font-weight: 700; letter-spacing: 0.2px;
+    }
+    h1 {
+      font-size: clamp(2.2rem, 5vw, 3.4rem); line-height: 1.08; letter-spacing: -1.4px;
+      margin: 18px 0 16px; font-weight: 800;
+    }
+    .lede { font-size: 1.15rem; color: rgba(255,255,255,0.88); max-width: 34em; margin: 0 0 28px; }
+    @media (max-width: 860px) { .lede { margin-left: auto; margin-right: auto; } }
+    .cta { display: flex; gap: 12px; flex-wrap: wrap; padding-bottom: 56px; }
+    @media (max-width: 860px) { .cta { justify-content: center; } }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 20px; border-radius: 14px; font-weight: 700; font-size: 15px; text-decoration: none;
+    }
+    .btn-light { background: #fff; color: #4a3bd6; }
+    .btn-ghost { color: #fff; border: 1px solid rgba(255,255,255,0.4); }
+    .soon { font-size: 13.5px; color: rgba(255,255,255,0.8); margin: -40px 0 56px; }
+
+    /* Phone mock */
+    .phone-col { display: flex; justify-content: center; align-self: end; }
+    .phone {
+      width: 300px; max-width: 100%;
+      background: var(--canvas); color: var(--text);
+      border: 10px solid #121218; border-bottom: 0;
+      border-radius: 40px 40px 0 0;
+      padding: 18px 14px 0;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.25);
+      text-align: left;
+    }
+    .ph-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .ph-team { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 13px; }
+    .dot { width: 22px; height: 22px; border-radius: 7px; background: var(--grad); }
+    .avatar { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 700; color: #fff; }
+    .ph-hello { font-size: 12px; color: var(--muted); font-weight: 600; }
+    .ph-title { font-size: 21px; font-weight: 800; letter-spacing: -0.5px; margin: 2px 0 12px; }
+    .ph-progress { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 12px; margin-bottom: 12px; }
+    .ph-progress .row { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; }
+    .bar { height: 7px; border-radius: 9px; background: var(--surface-muted); margin-top: 8px; overflow: hidden; }
+    .bar i { display: block; height: 100%; width: 62%; background: var(--grad); border-radius: 9px; }
+    .ph-section { font-size: 11px; font-weight: 800; letter-spacing: 0.7px; color: var(--muted); margin: 14px 2px 8px; }
+    .task {
+      display: flex; gap: 10px; align-items: flex-start;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+      padding: 10px; margin-bottom: 8px;
+    }
+    .check { width: 18px; height: 18px; border-radius: 6px; border: 2px solid var(--border); flex: none; margin-top: 1px; }
+    .check.done { background: var(--success); border-color: var(--success); display: grid; place-items: center; }
+    .task b { display: block; font-size: 13px; font-weight: 700; }
+    .task.is-done b { color: var(--muted); text-decoration: line-through; }
+    .chips { display: flex; gap: 5px; margin-top: 5px; flex-wrap: wrap; }
+    .chip { font-size: 10.5px; font-weight: 700; padding: 2px 7px; border-radius: 999px; }
+    .c-high { background: #feeceb; color: #d92d20; }
+    .c-med { background: var(--warning-soft); color: var(--warning); }
+    .c-due { background: var(--info-soft); color: var(--info); }
+    .c-team { background: var(--brand-soft); color: var(--brand); }
+    @media (prefers-color-scheme: dark) { .c-high { background: #33171a; color: #f97066; } }
+
+    /* Sections */
+    section { padding: 88px 0 0; }
+    @media (max-width: 600px) { section { padding-top: 64px; } }
+    .kicker { color: var(--brand); font-weight: 800; font-size: 13px; letter-spacing: 0.8px; text-transform: uppercase; }
+    h2 { font-size: clamp(1.7rem, 3.4vw, 2.3rem); line-height: 1.15; letter-spacing: -0.8px; margin: 8px 0 12px; font-weight: 800; }
+    .sub { color: var(--text-2); font-size: 1.05rem; max-width: 40em; margin: 0; }
+
+    .problem {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 32px;
+    }
+    @media (max-width: 760px) { .problem { grid-template-columns: 1fr; } }
+    .card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 22px;
+      padding: 24px; box-shadow: var(--shadow);
+    }
+    .card h3 { margin: 0 0 8px; font-size: 1.1rem; letter-spacing: -0.2px; }
+    .card p { margin: 0; color: var(--text-2); }
+    .card ul { margin: 10px 0 0; padding-left: 20px; color: var(--text-2); }
+    .card li { margin: 4px 0; }
+    .card.before h3 { color: var(--text-2); }
+    .card.after { border-color: var(--brand); }
+
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 32px; counter-reset: s; }
+    @media (max-width: 860px) { .steps { grid-template-columns: 1fr; } }
+    .step .num {
+      width: 40px; height: 40px; border-radius: 12px; background: var(--grad); color: #fff;
+      display: grid; place-items: center; font-weight: 800; margin-bottom: 16px;
+    }
+    .code {
+      display: inline-flex; gap: 4px; margin-top: 14px;
+    }
+    .code span {
+      width: 28px; height: 34px; border-radius: 8px; background: var(--brand-soft); color: var(--brand);
+      display: grid; place-items: center; font-weight: 800; font-size: 15px;
+    }
+
+    .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 32px; }
+    @media (max-width: 860px) { .features { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 560px) { .features { grid-template-columns: 1fr; } }
+    .icon {
+      width: 44px; height: 44px; border-radius: 13px; background: var(--brand-soft); color: var(--brand);
+      display: grid; place-items: center; margin-bottom: 14px;
+    }
+    .icon svg { width: 22px; height: 22px; }
+
+    .who { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+    .pill {
+      padding: 10px 16px; border-radius: 999px; background: var(--surface); border: 1px solid var(--border);
+      font-weight: 600; font-size: 15px;
+    }
+
+    .trust {
+      display: grid; grid-template-columns: auto 1fr auto; gap: 24px; align-items: center;
+    }
+    @media (max-width: 760px) { .trust { grid-template-columns: 1fr; } }
+    .trust .icon { margin: 0; width: 56px; height: 56px; }
+    .trust h3 { margin: 0 0 6px; }
+    .trust .links { display: flex; flex-direction: column; gap: 6px; font-weight: 700; }
+
+    .final {
+      margin-top: 88px; background: var(--grad); color: #fff; border-radius: 28px;
+      padding: 48px 32px; text-align: center;
+    }
+    @media (max-width: 600px) { .final { margin-top: 64px; padding: 36px 20px; } }
+    .final h2 { color: #fff; margin-top: 0; }
+    .final p { color: rgba(255,255,255,0.88); margin: 0 auto 24px; max-width: 32em; }
+
+    footer {
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+      padding: 32px 0 40px; color: var(--muted); font-size: 14px;
+    }
+    footer a { color: var(--text-2); text-decoration: none; margin-left: 18px; }
+    footer a:first-child { margin-left: 0; }
+    footer a:hover { color: var(--brand); }
+  </style>
 </head>
 <body>
-<main>
-  <h1>PrepWisely Team</h1>
-  <p><a href="privacy.html">Privacy Policy</a> · <a href="delete-account.html">Delete your account</a></p>
+
+<header class="hero">
+  <div class="wrap">
+    <nav>
+      <a class="logo" href="#">
+        <span class="logo-mark">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg>
+        </span>
+        PrepWisely Team
+      </a>
+      <div class="links">
+        <a href="#how">How it works</a>
+        <a href="#features">Features</a>
+        <a href="privacy.html">Privacy</a>
+      </div>
+    </nav>
+
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow">Task management for small teams</span>
+        <h1>Plan, assign and track work together.</h1>
+        <p class="lede">Your own to-dos and your team's shared work in one simple app.
+        Create a team, share a six-letter code, and everyone can see what's
+        happening, who's doing it and when it's due.</p>
+        <div class="cta">
+          <a class="btn btn-light" href="#how">See how it works</a>
+          <a class="btn btn-ghost" href="mailto:dharanigowthamsampath@gmail.com?subject=PrepWisely%20Team%20early%20access">Get early access</a>
+        </div>
+        <p class="soon">Coming soon to Google Play and the App Store.</p>
+      </div>
+
+      <div class="phone-col" aria-hidden="true">
+        <div class="phone">
+          <div class="ph-top">
+            <div class="ph-team"><span class="dot"></span>Design Studio</div>
+            <span class="avatar" style="background:#6d5dfc">AK</span>
+          </div>
+          <div class="ph-hello">Good morning, Arun</div>
+          <div class="ph-title">Your tasks</div>
+          <div class="ph-progress">
+            <div class="row"><span>Your progress</span><span style="color:var(--brand)">5 of 8 done</span></div>
+            <div class="bar"><i></i></div>
+          </div>
+          <div class="ph-section">ASSIGNED TO YOU</div>
+          <div class="task">
+            <span class="check"></span>
+            <div><b>Finalise client proposal</b>
+              <div class="chips"><span class="chip c-high">High</span><span class="chip c-due">Due today</span></div></div>
+          </div>
+          <div class="task">
+            <span class="check"></span>
+            <div><b>Review homepage mockups</b>
+              <div class="chips"><span class="chip c-med">Medium</span><span class="chip c-team">From Priya</span></div></div>
+          </div>
+          <div class="ph-section">PERSONAL</div>
+          <div class="task is-done">
+            <span class="check done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg></span>
+            <div><b>Weekly progress report</b></div>
+          </div>
+          <div class="task" style="margin-bottom:0;border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom:0">
+            <span class="check"></span>
+            <div><b>Book venue for offsite</b>
+              <div class="chips"><span class="chip c-due">Fri</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section>
+    <div class="kicker">The idea</div>
+    <h2>Team work shouldn't live in chat threads.</h2>
+    <p class="sub">Small teams usually hand out work in WhatsApp groups, calls and
+    sticky notes. Tasks get buried, nobody is sure who owns what, and personal
+    to-dos sit in yet another app. PrepWisely Team gives every team one calm
+    place for both.</p>
+
+    <div class="problem">
+      <div class="card before">
+        <h3>Without it</h3>
+        <ul>
+          <li>"Who was doing this?" asked in a group chat</li>
+          <li>Deadlines scrolled away under new messages</li>
+          <li>Your own to-dos in a separate notes app</li>
+          <li>Work from different companies mixed together</li>
+        </ul>
+      </div>
+      <div class="card after">
+        <h3>With PrepWisely Team</h3>
+        <ul>
+          <li>Every shared task has a clear owner and a status</li>
+          <li>Due dates and priorities right on the task</li>
+          <li>Personal to-dos next to team work, kept private to you</li>
+          <li>One separate workspace for each team you belong to</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="kicker">How it works</div>
+    <h2>Up and running in a minute.</h2>
+    <p class="sub">No setup calls, no admin console. One person creates the team and
+    everyone else joins with a code.</p>
+
+    <div class="steps">
+      <div class="card step">
+        <div class="num">1</div>
+        <h3>Create a team</h3>
+        <p>Sign up with your email, name your team and pick a colour. You're the
+        owner.</p>
+      </div>
+      <div class="card step">
+        <div class="num">2</div>
+        <h3>Share the invite code</h3>
+        <p>Every team gets a six-letter code. Send it however you like, and
+        teammates join in seconds.</p>
+        <div class="code" aria-label="Example code K7PQ4M"><span>K</span><span>7</span><span>P</span><span>Q</span><span>4</span><span>M</span></div>
+      </div>
+      <div class="card step">
+        <div class="num">3</div>
+        <h3>Assign and track</h3>
+        <p>Add tasks, assign them to anyone in the team and watch them move from
+        To do to In progress to Done.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="kicker">Features</div>
+    <h2>Everything a small team needs, nothing it doesn't.</h2>
+
+    <div class="features">
+      <div class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></div>
+        <h3>Personal to-dos</h3>
+        <p>Private tasks just for you, kept beside your team work so your whole day
+        is in one list.</p>
+      </div>
+      <div class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="9" r="2.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M15.5 20a5 5 0 0 1 6-4.8"/></svg></div>
+        <h3>Shared team tasks</h3>
+        <p>Common tasks the whole team can see, assign to anyone, or leave open for
+        whoever picks them up.</p>
+      </div>
+      <div class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg></div>
+        <h3>Separate workspaces</h3>
+        <p>In more than one team or company? Each team is fully separate, and you
+        switch between them with one tap.</p>
+      </div>
+      <div class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg></div>
+        <h3>Live updates</h3>
+        <p>When a teammate adds, assigns or finishes a task, it shows up on your
+        phone straight away. No refreshing.</p>
+      </div>
+      <div class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></div>
+        <h3>Due dates and priorities</h3>
+        <p>Mark what's urgent, set deadlines and see at a glance what's due today
+        and what's overdue.</p>
+      </div>
+      <div class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h12"/></svg></div>
+        <h3>Team board</h3>
+        <p>See all of the team's work by status, from To do through In progress to
+        Done, and spot what's stuck.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="kicker">Who it's for</div>
+    <h2>Built for teams that move fast.</h2>
+    <p class="sub">Anyone who has outgrown a group chat but doesn't need a heavy
+    project-management tool.</p>
+    <div class="who">
+      <span class="pill">Startups</span>
+      <span class="pill">Agencies and studios</span>
+      <span class="pill">Freelancers working with several clients</span>
+      <span class="pill">Small business staff</span>
+      <span class="pill">Student and project groups</span>
+      <span class="pill">Volunteer and event teams</span>
+    </div>
+  </section>
+
+  <section>
+    <div class="card trust">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 4.5 3.4 8.2 8 9 4.6-.8 8-4.5 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg></div>
+      <div>
+        <h3>Your data stays yours</h3>
+        <p>No ads, no tracking and no selling of data. Only members of a team can see
+        what's inside it, and you can delete your account at any time from inside
+        the app.</p>
+      </div>
+      <div class="links">
+        <a href="privacy.html">Privacy policy</a>
+        <a href="delete-account.html">Delete your account</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="final">
+    <h2>Coming soon to Android and iPhone.</h2>
+    <p>Want to try it with your team before launch? Drop a line and we'll send you
+    early access.</p>
+    <a class="btn btn-light" href="mailto:dharanigowthamsampath@gmail.com?subject=PrepWisely%20Team%20early%20access">Get early access</a>
+  </div>
+
+  <footer>
+    <span>© 2026 PrepWisely Team</span>
+    <span>
+      <a href="privacy.html">Privacy</a>
+      <a href="delete-account.html">Delete account</a>
+      <a href="mailto:dharanigowthamsampath@gmail.com">Contact</a>
+    </span>
+  </footer>
 </main>
+
 </body>
 </html>
