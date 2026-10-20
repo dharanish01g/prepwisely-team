@@ -116,44 +116,42 @@
     .btn-ghost { color: #fff; border: 1px solid rgba(255,255,255,0.4); }
     .soon { font-size: 13.5px; color: rgba(255,255,255,0.8); margin: -40px 0 56px; }
 
-    /* Phone mock */
+    /* Phones: real app screenshots (600 × 1305, 2× for ~300px wide) */
     .phone-col { display: flex; justify-content: center; align-self: end; }
     .phone {
       width: 300px; max-width: 100%;
-      background: var(--canvas); color: var(--text);
-      border: 10px solid #121218; border-bottom: 0;
-      border-radius: 40px 40px 0 0;
-      padding: 18px 14px 0;
+      background: #121218; border: 10px solid #121218;
+      border-radius: 44px; overflow: hidden;
       box-shadow: 0 30px 60px rgba(0,0,0,0.25);
-      text-align: left;
     }
-    .ph-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-    .ph-team { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 13px; }
-    .dot { width: 22px; height: 22px; border-radius: 7px; background: var(--grad); }
-    .avatar { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 700; color: #fff; }
-    .ph-hello { font-size: 12px; color: var(--muted); font-weight: 600; }
-    .ph-title { font-size: 21px; font-weight: 800; letter-spacing: -0.5px; margin: 2px 0 12px; }
-    .ph-progress { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 12px; margin-bottom: 12px; }
-    .ph-progress .row { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; }
-    .bar { height: 7px; border-radius: 9px; background: var(--surface-muted); margin-top: 8px; overflow: hidden; }
-    .bar i { display: block; height: 100%; width: 62%; background: var(--grad); border-radius: 9px; }
-    .ph-section { font-size: 11px; font-weight: 800; letter-spacing: 0.7px; color: var(--muted); margin: 14px 2px 8px; }
-    .task {
-      display: flex; gap: 10px; align-items: flex-start;
-      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
-      padding: 10px; margin-bottom: 8px;
+    .phone img { display: block; width: 100%; height: auto; border-radius: 34px; }
+    /* In the hero the phone rises out of the bottom edge, cropped. */
+    .hero .phone { height: 560px; border-bottom: 0; border-radius: 44px 44px 0 0; }
+    .hero .phone img { border-radius: 34px 34px 0 0; }
+    @media (max-width: 600px) { .hero .phone { height: 480px; } }
+
+    .shots {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+      margin-top: 40px; justify-items: center;
     }
-    .check { width: 18px; height: 18px; border-radius: 6px; border: 2px solid var(--border); flex: none; margin-top: 1px; }
-    .check.done { background: var(--success); border-color: var(--success); display: grid; place-items: center; }
-    .task b { display: block; font-size: 13px; font-weight: 700; }
-    .task.is-done b { color: var(--muted); text-decoration: line-through; }
-    .chips { display: flex; gap: 5px; margin-top: 5px; flex-wrap: wrap; }
-    .chip { font-size: 10.5px; font-weight: 700; padding: 2px 7px; border-radius: 999px; }
-    .c-high { background: #feeceb; color: #d92d20; }
-    .c-med { background: var(--warning-soft); color: var(--warning); }
-    .c-due { background: var(--info-soft); color: var(--info); }
-    .c-team { background: var(--brand-soft); color: var(--brand); }
-    @media (prefers-color-scheme: dark) { .c-high { background: #33171a; color: #f97066; } }
+    .shots figure { margin: 0; width: 100%; max-width: 300px; }
+    .shots .phone { width: 100%; box-shadow: var(--shadow); }
+    .shots figcaption { margin-top: 18px; text-align: center; }
+    .shots figcaption b { display: block; font-size: 1.05rem; }
+    .shots figcaption span { color: var(--text-2); font-size: 0.95rem; }
+    /* Phones side by side don't fit: swipe through them instead. */
+    @media (max-width: 860px) {
+      .shots {
+        display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory;
+        margin-left: -24px; margin-right: -24px; padding: 0 24px 12px;
+        scrollbar-width: none;
+      }
+      .shots::-webkit-scrollbar { display: none; }
+      .shots figure { flex: 0 0 240px; scroll-snap-align: center; }
+    }
+    @media (max-width: 600px) {
+      .shots { margin-left: -16px; margin-right: -16px; padding: 0 16px 12px; }
+    }
 
     /* Sections */
     section { padding: 88px 0 0; }
@@ -266,39 +264,10 @@
         <p class="soon">Coming soon to Google Play and the App Store.</p>
       </div>
 
-      <div class="phone-col" aria-hidden="true">
+      <div class="phone-col">
         <div class="phone">
-          <div class="ph-top">
-            <div class="ph-team"><span class="dot"></span>Design Studio</div>
-            <span class="avatar" style="background:#6d5dfc">AK</span>
-          </div>
-          <div class="ph-hello">Good morning, Arun</div>
-          <div class="ph-title">Your tasks</div>
-          <div class="ph-progress">
-            <div class="row"><span>Your progress</span><span style="color:var(--brand)">5 of 8 done</span></div>
-            <div class="bar"><i></i></div>
-          </div>
-          <div class="ph-section">ASSIGNED TO YOU</div>
-          <div class="task">
-            <span class="check"></span>
-            <div><b>Finalise client proposal</b>
-              <div class="chips"><span class="chip c-high">High</span><span class="chip c-due">Due today</span></div></div>
-          </div>
-          <div class="task">
-            <span class="check"></span>
-            <div><b>Review homepage mockups</b>
-              <div class="chips"><span class="chip c-med">Medium</span><span class="chip c-team">From Priya</span></div></div>
-          </div>
-          <div class="ph-section">PERSONAL</div>
-          <div class="task is-done">
-            <span class="check done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg></span>
-            <div><b>Weekly progress report</b></div>
-          </div>
-          <div class="task" style="margin-bottom:0;border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom:0">
-            <span class="check"></span>
-            <div><b>Book venue for offsite</b>
-              <div class="chips"><span class="chip c-due">Fri</span></div></div>
-          </div>
+          <img src="img/my-tasks.webp" width="600" height="1305"
+            alt="My Tasks screen: 7 tasks open, 2 due today and 1 overdue, with a list of personal to-dos">
         </div>
       </div>
     </div>
@@ -363,6 +332,31 @@
         <p>"Send the invoice, Friday, Priya." They get it, they tick it off, and
         you see that it's done.</p>
       </div>
+    </div>
+  </section>
+
+  <section id="screens">
+    <div class="kicker">A look inside</div>
+    <h2>Simple enough to use without a tour.</h2>
+    <p class="sub">Your list, the team's list, and who's on the team. Nothing
+    hidden in menus.</p>
+
+    <div class="shots">
+      <figure>
+        <div class="phone"><img src="img/new-task.webp" width="600" height="1305" loading="lazy"
+          alt="New task form: a title and note, a teammate picked under Assign to, priority and due date"></div>
+        <figcaption><b>Remind someone</b><span>Write it, pick who, add a date.</span></figcaption>
+      </figure>
+      <figure>
+        <div class="phone"><img src="img/board.webp" width="600" height="1305" loading="lazy"
+          alt="Board screen: everyone's open tasks, filterable by person, with overdue and due-today tasks marked"></div>
+        <figcaption><b>See what's open</b><span>Everyone's tasks, overdue first.</span></figcaption>
+      </figure>
+      <figure>
+        <div class="phone"><img src="img/team.webp" width="600" height="1305" loading="lazy"
+          alt="Team screen: open, in progress and overdue counts, and each member's progress"></div>
+        <figcaption><b>Know who's on what</b><span>Each person's progress at a glance.</span></figcaption>
+      </figure>
     </div>
   </section>
 
